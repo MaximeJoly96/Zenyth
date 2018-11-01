@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _projectile;
 
+    public SpawnConfig _spawnConfig;
+
     private void Awake()
     {
         StartCoroutine(ReadyFire());
@@ -19,34 +21,28 @@ public class Enemy : MonoBehaviour
     {
         while(true)
         {
-            Fire();
+            Fire(_spawnConfig);
             yield return new WaitForSeconds(_bpm);
         }
     }
 
-    private void Fire()
+    private void Fire(SpawnConfig config)
     {
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
-        for (int i = 0; i < 360; i++)
+        for(int i = 0; i < config.Spots.Count; i++)
         {
-            if (i % 3 == _phase)
-            {
-                GameObject point = new GameObject();
-                point.transform.parent = this.transform;
-                point.name = "Spot" + i;
+            GameObject point = new GameObject();
+            point.transform.parent = this.transform;
+            point.name = "Spot" + i;
 
-                point.transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * i) * sr.bounds.extents.x,
-                                                       Mathf.Sin(Mathf.Deg2Rad * i) * sr.bounds.extents.y,
-                                                       0);
-                point.transform.rotation = Quaternion.Euler(0, 0, i);
+            point.transform.position = new Vector3(Mathf.Cos(Mathf.Deg2Rad * config.Spots[i]) * sr.bounds.extents.x,
+                                                   Mathf.Sin(Mathf.Deg2Rad * config.Spots[i]) * sr.bounds.extents.y,
+                                                   0);
+            point.transform.rotation = Quaternion.Euler(0, 0, config.Spots[i]);
 
-                EnemyFireSpot efs = point.AddComponent<EnemyFireSpot>();
-                efs.SpawnProjectile(_projectile);
-            }
+            EnemyFireSpot efs = point.AddComponent<EnemyFireSpot>();
+            efs.SpawnProjectile(_projectile);
         }
-
-        if (_phase < 3) _phase++;
-        else _phase = 0;
     }
 }

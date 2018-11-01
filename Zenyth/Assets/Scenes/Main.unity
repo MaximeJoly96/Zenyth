@@ -379,6 +379,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectile: {fileID: 1034497490192778, guid: e7d4c09c3b5ee994b80ecd589a2fc16a,
     type: 2}
+  _spawnConfig:
+    _spots: 0000000078000000f0000000
+    _speed: 3
 --- !u!212 &725149537
 SpriteRenderer:
   m_ObjectHideFlags: 0
